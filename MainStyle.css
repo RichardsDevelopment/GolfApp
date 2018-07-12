@@ -1,0 +1,110 @@
+body{
+    height: 100vh;
+    width: 100vw;
+    margin: 0 auto;
+}
+#wrapper{
+    height: 100%;
+    width: 100%;
+	display: inline;
+    background-color: #EDFAFD;
+    /* background-image: url("./res/Slideshow/magnolia-golf-course-mobile-alabama-golfing-163886.jpeg");
+    background-size: cover;
+    background-repeat: no-repeat; */
+}
+.nav{
+    height: 70px;
+    width: 100%;
+    background-color: #135589;
+    border-bottom: 0.5px solid #327BAB;
+}
+.nav ul {
+    list-style: none;
+    text-align: center;
+    padding: 0;
+    margin: 0;
+  }
+  .nav li {
+    font-family: 'Oswald', sans-serif;
+    width: 120px;
+    font-size: 1.2em;
+    font-weight: bold;
+    line-height: 70px;
+    height: 70px;
+    border-bottom: none;
+    display: inline-block;
+	float: left;
+  }
+   
+  .nav a {
+    text-decoration: none;
+    color: #fff;
+    display: block;
+    transition: .3s background-color;
+    /* margin-right: -4px; */
+  }
+   
+  .nav a:hover {
+    background-color: #2A93D5;
+  }
+   
+  .nav a.active {
+    background-color: #fff;
+    color: #444;
+    transition: .3s background-color;
+  }
+
+  .nav a.active:hover{
+    background-color: #2A93D5;
+  }
+  .first-headline{
+    color: #444;
+    top: 135px;
+    right: 0px;
+	display: inline-block;
+	float: right;
+    width: 25%;
+    text-align: center;
+	    margin-top: 60px;
+    margin-right: 35px;
+  }
+  .jumboimage{
+	  width: 67%;
+      height: 76%;
+	  background-image: url('./res/golf-sunset-sport-golfer.png');
+	  background-repeat: no-repeat;
+	  background-size: 100% 100%;
+	  display: inline-block;
+  }
+
+#login_dialog{
+	padding: 50px 55px;
+}
+
+#login_inputs{
+	text-align: right;
+}
+
+#login_dialog_buttons{
+	text-align: center;
+}
+input{
+	height: 30px;
+	width: 275px;
+}
+
+.ui-widget{
+	font-size: 1.3em;
+}
+
+.ui-widget-header{
+	background:#135589;
+	color: #fff;
+}
+
+.ui-widget.ui-widget-content {
+    border: 2px solid #000000;
+}
+.error_msg{
+	color:red;
+}

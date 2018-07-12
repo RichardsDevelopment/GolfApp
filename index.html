@@ -1,0 +1,103 @@
+<!doctype html>
+<html>
+    <head>
+        <title> D20chat Home </title>
+		<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <link rel="stylesheet" type="text/css" href="./MainStyle.css">
+    </head>
+    <body>
+        <div id="wrapper">
+            <div class="nav">
+                <ul>
+                    <li><a href="#">Home</a>
+                    <li><a href="#">About</a>
+                    <li><a href="#">Contact Us</a>
+                    <div id="right-nav-buttons">
+                        <li style="float:right" id="signup_button"><a href="#" class="active">Sign Up</a>
+                        <li style="float:right" id="login_button"><a href="#" class="active">Login</a>
+                    </div>
+                </ul>
+            </div>
+			<div class="jumboimage">
+			</div>			
+            <div class="first-headline">
+               <h1> PGA Tour stats, right at your fingertips! </h1>
+               <h3> 
+                   No more hunting for rankings, this site will do it all for you! We will provide you with 
+                   up-to-date information that will help you make the most informed Fantasy decisions. Join today!
+               </h3> 
+            </div>
+        </div>
+		<div id="login_dialog" title="Login">
+			<form>
+				<div id="login_inputs">
+					Email: <input type="email" id="login_email">
+					<br>
+					Password: <input type="password" id="login_pass">
+					<br><br>
+				</div>
+				<div id="login_dialog_buttons">
+					<p class="error_msg" id="error_msg"></p>
+					<button id="login_submit">Submit</button><button id="login_cancel">Cancel</button>
+				</div>
+			</form>
+		</div>
+		<script src="//code.jquery.com/jquery-1.12.4.js"></script>
+		<script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+		<script>
+			$(function(){
+				$( "#login_dialog" ).dialog({
+					resizable: false, 
+					autoOpen: false,
+					minHeight: 275,
+					minWidth: 500
+				});
+				$("#login_button").on("click", function(e){
+					e.preventDefault();
+					$("#login_dialog").dialog("open");
+				});
+				$("#login_cancel").on("click", function(e){
+					e.preventDefault();
+					$("#error_msg").val("");
+					$("#login_dialog").dialog("close");
+				});
+				$("#login_submit").on("click", function(e){
+					e.preventDefault();
+					
+					var login = $('#login_email').val();
+					var pass = $('#login_pass').val();
+					
+					//alert(login+" "+pass);
+					$.ajax({
+						type: "GET",
+						url: './checkLogin.php',
+						data:{
+							login : login,
+							pass : pass
+						},
+						success : function(result){
+							if(result == "NoLoginFound"){
+								var element = document.getElementById("error_msg");
+								element.innerHTML = "Incorrect login. Please try again!";
+							}
+							else if(result == "success"){
+								var element = document.getElementById("error_msg");
+								element.innerHTML = "Login success!";
+							}
+							else{
+								var element = document.getElementById("error_msg");
+								element.innerHTML = "Something went wrong!";
+							}
+							// analyze result for login errors
+							//alert(result)
+						},
+						error : function(request, error){
+							alert("There was an error: " + error);
+							alert("Request: "+JSON.stringify(request));
+						}
+					});
+				});
+			});	
+		</script>
+    </body>    
+</html>

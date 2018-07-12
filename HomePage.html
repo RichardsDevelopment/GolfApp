@@ -1,0 +1,179 @@
+<!doctype html>
+<html>
+    <head>
+        <title> D20chat Home </title>
+		<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <link rel="stylesheet" type="text/css" href="./homestyling.css">
+    </head>
+    <body>
+        <div id="wrapper">
+            <div class="nav">
+                <ul>
+                    <li><a href="#">Home</a>
+                    <li><a href="#">About</a>
+                    <li><a href="#">Contact Us</a>
+                    <div id="right-nav-buttons">
+                        <li style="float:right"><a href="#" class="active">Sign Up</a>
+                        <li style="float:right"><a href="#" class="active">Login</a>
+						<li style="float:right"><a id="testAnalysis" class="active">Test</a>
+                    </div>
+                </ul>
+            </div>
+			<div class="jumboimage">
+
+			</div>			
+            <div class="first-headline">
+               <h1> PGA Tour stats, right at your fingertips! </h1>
+               <h3> 
+                   No more hunting for rankings, this site will do it all for you! We will provide you with 
+                   up-to-date information that will help you make the most informed Fantasy decisions. Join today!
+               </h3> 
+            </div>
+        </div>
+		<dialog id="test">
+			<button id="closeTest">Close</button>
+			<form method="dialog" id="testStatForm">
+				<section>
+					<p><label for="stat1">Stat1:</label>
+						<select id="stat1">
+							<option></option>
+							<option>drivaccu</option>
+							<option>drivdist</option>
+							<option>gir</option>
+							<option>scoreavg</option>
+							<option>scram</option>
+							<option>sgputt</option>
+							<option>sgteegreen</option>
+							<option>sgtotal</option>
+							<option>standings</option>
+							<option>top10s</option>
+							<option>sgapproach</option>
+							<option>totaldriving</option>
+						</select>
+					</p>
+					<p><label for="stat2">Stat2:</label>
+						<select id="stat2">
+							<option></option>
+							<option>drivaccu</option>
+							<option>drivdist</option>
+							<option>gir</option>
+							<option>scoreavg</option>
+							<option>scram</option>
+							<option>sgputt</option>
+							<option>sgteegreen</option>
+							<option>sgtotal</option>
+							<option>standings</option>
+							<option>top10s</option>
+							<option>sgapproach</option>
+							<option>totaldriving</option>
+						</select>
+					</p>
+				</section>
+				<menu>
+					<button id="cancel" type="reset">Cancel</button>
+					<button type="submit">Submit</button>
+				</menu>
+			</form>	
+		</dialog>	
+		<dialog id="resultsDialog">
+			<button id="closeResults">Close</button>
+			<table style="width:100%" id="resultsTable">
+				<tr>
+					<th>Name</th>
+					<th id="chosenstat1"></th> 
+					<th id="chosenstat2"></th>
+					<th>Total</th>
+				</tr>
+			</table>
+		</dialog>		
+		<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+		<script>
+			$(function(){
+				function splitString(result, callback){
+					var res = result.split("|");
+					var completeTable = [];
+					var numRecords = res.length;
+					
+					//alert(res);
+					
+					for (var i = 0; i < res.length; i++){
+						var temp = res[i].split(",");
+						
+						if(i ==0){
+							alert(temp);
+						}
+						
+						completeTable.push(temp);
+						
+						if(completeTable.length == numRecords){
+							callback(completeTable);
+						}
+					}					
+				}
+				
+				$('#closeTest').on('click', function(){
+					var myDialog = document.getElementById('test');
+					
+					myDialog.close();
+				});
+				
+				$('#closeResults').on('click', function(){
+					var myDialog = document.getElementById('resultsDialog');
+					
+					myDialog.close();
+					$( "#resultsDialog .forRemoval" ).remove();
+				});
+				
+				$('#testAnalysis').on('click', function(){
+					var myDialog = document.getElementById('test');
+					
+					myDialog.showModal();
+				});
+				
+				$( "#testStatForm" ).submit(function(e) {
+					e.preventDefault();
+					
+					var stat1 = $('#stat1 option:selected').text();
+					var stat2 = $('#stat2 option:selected').text();
+					var myDialog = document.getElementById('test');
+					
+					myDialog.close();
+					
+					$.ajax({
+						type: "GET",
+						url: './getStatistics.php',
+						//dataType: "json",
+						data:{
+							stat1 : stat1,
+							stat2 : stat2
+						},
+						success : function(result){
+							//alert(result);
+							document.getElementById("chosenstat1").innerHTML = stat1;
+							document.getElementById("chosenstat2").innerHTML = stat2;
+							
+							splitString(result, function(resTable){
+								//alert(resTable);
+								for(var i = 0; i < resTable.length; i++){
+									$("#resultsTable > tbody:last-child").append("<tr class=\"forRemoval\"><td>" + resTable[i][0] + "</td><td>" +  resTable[i][2]+ "</td><td>" + resTable[i][3] + "</td><td>" + resTable[i][1] + "</td></tr>");
+									
+									if(i == (resTable.length - 2)){
+										var myDialog = document.getElementById('resultsDialog');
+					
+										myDialog.showModal();
+										break;
+									}
+								}
+							});
+						},
+						error : function(request, error){
+							alert("There was an error: " + error);
+							alert("Request: "+JSON.stringify(request));
+						}
+					});
+				});
+			});	
+		</script>
+    </body>    
+</html>
